@@ -35,7 +35,7 @@ func _chase(_delta: float) -> void:
 		state = State.PATROL
 		return
 
-	if chase_target.is_hidden:
+	if chase_target.get("is_hidden"):
 		state = State.PATROL
 		chase_target = null
 		return

@@ -6,6 +6,8 @@ extends Area2D
 @onready var platform: StaticBody2D = $Platform
 
 func _ready() -> void:
+	# Area2D must monitor layer 2 (cat) to fire body_entered/exited
+	set_collision_mask_value(2, true)
 	# Platform on layer 4 so only the cat (mask 4) can land on it
 	platform.set_collision_layer_value(1, false)
 	platform.set_collision_layer_value(4, is_platform)
