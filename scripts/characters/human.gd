@@ -12,7 +12,16 @@ const ALERT_DURATION = 2.0
 
 var chase_target: Node = null
 
+func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
+	const N := 14
+	var pts := PackedVector2Array()
+	for i in N:
+		var a := TAU * i / N
+		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+
 func _draw() -> void:
+	_draw_ellipse_shadow(Vector2(0, 2), 12, 4)
 	# body
 	draw_rect(Rect2(-10, -28, 20, 20), Color(0.3, 0.5, 0.8))
 	# head

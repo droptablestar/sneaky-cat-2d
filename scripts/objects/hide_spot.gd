@@ -30,7 +30,16 @@ func _physics_process(_delta: float) -> void:
 		if body.get("is_hidden") != should_hide:
 			body.set_hidden(should_hide)
 
+func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
+	const N := 14
+	var pts := PackedVector2Array()
+	for i in N:
+		var a := TAU * i / N
+		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+
 func _draw() -> void:
+	_draw_ellipse_shadow(Vector2(0, 4), 36, 6)
 	if is_platform:
 		# shelf surface
 		draw_rect(Rect2(-32, -30, 64, 8), Color(0.5, 0.35, 0.15))
