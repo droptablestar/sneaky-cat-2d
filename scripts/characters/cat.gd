@@ -9,6 +9,9 @@ enum State { IDLE, RUNNING, JUMPING, HIDING }
 var state: State = State.IDLE
 var is_hidden: bool = false
 
+const SHADOW_HW: float = 10.0
+const SHADOW_HEIGHT: float = 36.0
+
 func _ready() -> void:
 	add_to_group("cat")
 	set_collision_layer_value(Layers.WORLD, false)
@@ -21,6 +24,7 @@ func _physics_process(delta: float) -> void:
 	_handle_movement()
 	move_and_slide()
 	_update_state()
+	queue_redraw()
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -52,16 +56,22 @@ func set_hidden(value: bool) -> void:
 	is_hidden = value
 	queue_redraw()
 
-func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
-	const N := 14
-	var pts := PackedVector2Array()
-	for i in N:
-		var a := TAU * i / N
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+func _draw_floor_shadow() -> void:
+	for lp: Vector2 in GameManager.LIGHT_POSITIONS:
+		var dx: float = global_position.x - lp.x
+		var dy: float = lp.y - global_position.y
+		var slen: float = clampf(dx * SHADOW_HEIGHT / maxf(abs(dy), 80.0), -22.0, 22.0)
+		var alpha: float = clampf(0.16 - absf(slen) * 0.003, 0.04, 0.16)
+		if not is_on_floor():
+			alpha *= 0.3
+		var pts := PackedVector2Array([
+			Vector2(-SHADOW_HW, 0), Vector2(SHADOW_HW, 0),
+			Vector2(slen + SHADOW_HW * 0.5, 4), Vector2(slen - SHADOW_HW * 0.5, 4),
+		])
+		draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, alpha))
 
 func _draw() -> void:
-	_draw_ellipse_shadow(Vector2(0, 2), 13, 4)
+	_draw_floor_shadow()
 	var color = Color(1.0, 0.55, 0.0) if not is_hidden else Color(1.0, 0.55, 0.0, 0.3)
 	draw_rect(Rect2(-12, -28, 24, 28), color)
 	# ears
