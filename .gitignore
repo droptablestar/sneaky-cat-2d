@@ -1,3 +1,6 @@
+# JetBrains IDE
+.idea/
+
 # Godot 4 generated files
 .godot/
 *.translation
