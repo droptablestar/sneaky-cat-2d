@@ -3,11 +3,18 @@ extends CharacterBody2D
 enum State { IDLE, RUNNING, JUMPING, HIDING }
 
 const SPEED = 180.0
-const JUMP_VELOCITY = -380.0
+const JUMP_VELOCITY = -460.0
 const GRAVITY = 900.0
 
 var state: State = State.IDLE
 var is_hidden: bool = false
+
+func _ready() -> void:
+	add_to_group("cat")
+	# Layer 2 = cat, collides with world (1) and platforms (4)
+	set_collision_layer_value(1, false)
+	set_collision_layer_value(2, true)
+	set_collision_mask_value(4, true)
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
@@ -43,3 +50,11 @@ func _update_state() -> void:
 
 func set_hidden(value: bool) -> void:
 	is_hidden = value
+	queue_redraw()
+
+func _draw() -> void:
+	var color = Color(1.0, 0.55, 0.0) if not is_hidden else Color(1.0, 0.55, 0.0, 0.3)
+	draw_rect(Rect2(-12, -28, 24, 28), color)
+	# ears
+	draw_rect(Rect2(-12, -36, 8, 10), color)
+	draw_rect(Rect2(4, -36, 8, 10), color)

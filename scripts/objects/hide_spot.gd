@@ -6,12 +6,20 @@ extends Area2D
 @onready var platform: StaticBody2D = $Platform
 
 func _ready() -> void:
-	# Enable or disable the physical platform based on the export flag
-	platform.set_collision_layer_value(1, is_platform)
-	platform.set_collision_mask_value(1, is_platform)
+	# Platform on layer 4 so only the cat (mask 4) can land on it
+	platform.set_collision_layer_value(1, false)
+	platform.set_collision_layer_value(4, is_platform)
 
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+
+func _draw() -> void:
+	# hide zone outline
+	draw_rect(Rect2(-40, -24, 80, 48), Color(0.2, 0.7, 0.2, 0.15))
+	draw_rect(Rect2(-40, -24, 80, 48), Color(0.2, 0.7, 0.2, 0.6), false, 1.0)
+	if is_platform:
+		# shelf surface
+		draw_rect(Rect2(-32, -30, 64, 8), Color(0.5, 0.35, 0.15))
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("cat"):

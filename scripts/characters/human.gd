@@ -12,6 +12,12 @@ const ALERT_DURATION = 2.0
 
 var chase_target: Node = null
 
+func _draw() -> void:
+	# body
+	draw_rect(Rect2(-10, -28, 20, 20), Color(0.3, 0.5, 0.8))
+	# head
+	draw_rect(Rect2(-8, -40, 16, 14), Color(0.9, 0.75, 0.6))
+
 func _on_detect(target: Node) -> void:
 	chase_target = target
 	alert_timer = ALERT_DURATION

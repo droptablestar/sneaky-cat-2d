@@ -13,10 +13,19 @@ var patrol_direction: float = 1.0  # 1 = right, -1 = left
 
 const GRAVITY = 900.0
 
-@onready var raycast: RayCast2D = $RayCast2D
+var raycast: RayCast2D
 
 func _ready() -> void:
 	patrol_origin = global_position
+	# Layer 3 = enemies, collide with world (1) only — pass through platforms
+	set_collision_layer_value(1, false)
+	set_collision_layer_value(3, true)
+	set_collision_mask_value(1, true)
+	# Build raycast in code to avoid @onready issues with inherited scripts
+	raycast = RayCast2D.new()
+	raycast.enabled = true
+	raycast.collision_mask = 10  # layer 2 (cat) + layer 4 (platforms block ray)
+	add_child(raycast)
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
@@ -40,20 +49,25 @@ func _patrol(_delta: float) -> void:
 	velocity.x = move_speed * patrol_direction
 
 	var dist_from_origin = global_position.x - patrol_origin.x
-	if abs(dist_from_origin) >= patrol_distance:
+	var past_boundary = abs(dist_from_origin) >= patrol_distance
+	var moving_away = sign(dist_from_origin) == sign(patrol_direction)
+
+	if (past_boundary and moving_away) or is_on_wall():
 		patrol_direction *= -1
 		$Sprite2D.flip_h = patrol_direction < 0
 
 func _check_detection() -> void:
+	if raycast == null:
+		return
 	raycast.target_position = Vector2(detection_range * patrol_direction, 0)
 	raycast.force_raycast_update()
 
 	if raycast.is_colliding():
 		var hit = raycast.get_collider()
-		if hit and hit.is_in_group("cat") and not hit.is_hidden:
+		if hit and hit.is_in_group("cat") and not hit.get("is_hidden"):
 			_on_detect(hit)
 
-func _on_detect(target: Node) -> void:
+func _on_detect(_target: Node) -> void:
 	state = State.ALERT
 
 # Override in subclasses for different alert/chase behaviors
