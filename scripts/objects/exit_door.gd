@@ -2,6 +2,9 @@ extends Area2D
 
 var _is_open: bool = false
 
+const SHADOW_HW: float = 14.0
+const SHADOW_HEIGHT: float = 52.0
+
 func _ready() -> void:
 	set_collision_layer_value(Layers.WORLD, false)
 	set_collision_mask_value(Layers.CAT, true)
@@ -16,16 +19,20 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("cat"):
 		GameManager.try_complete_level()
 
-func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
-	const N := 14
-	var pts := PackedVector2Array()
-	for i in N:
-		var a := TAU * i / N
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+func _draw_floor_shadow() -> void:
+	for lp: Vector2 in GameManager.LIGHT_POSITIONS:
+		var dx: float = global_position.x - lp.x
+		var dy: float = lp.y - global_position.y
+		var slen: float = clampf(dx * SHADOW_HEIGHT / maxf(abs(dy), 80.0), -22.0, 22.0)
+		var alpha: float = clampf(0.12 - absf(slen) * 0.002, 0.03, 0.12)
+		var pts := PackedVector2Array([
+			Vector2(-SHADOW_HW, 0), Vector2(SHADOW_HW, 0),
+			Vector2(slen + SHADOW_HW * 0.5, 4), Vector2(slen - SHADOW_HW * 0.5, 4),
+		])
+		draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, alpha))
 
 func _draw() -> void:
-	_draw_ellipse_shadow(Vector2(0, 2), 18, 5)
+	_draw_floor_shadow()
 	var door_color := Color(0.4, 0.25, 0.1) if not _is_open else Color(0.15, 0.6, 0.15)
 	var trim_color := Color(0.6, 0.4, 0.15) if not _is_open else Color(0.3, 1.0, 0.3)
 	# Door

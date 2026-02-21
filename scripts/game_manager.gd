@@ -4,6 +4,9 @@ signal fish_updated(current: int, total: int)
 signal player_caught
 signal level_won
 
+# Window light positions — used by objects to project floor shadows
+const LIGHT_POSITIONS: Array[Vector2] = [Vector2(220.0, 115.0), Vector2(920.0, 115.0)]
+
 var fish_collected: int = 0
 var fish_total: int = 0
 var _game_active: bool = true

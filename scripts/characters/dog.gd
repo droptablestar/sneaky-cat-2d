@@ -9,16 +9,23 @@ func _ready() -> void:
 
 var chase_target: Node = null
 
-func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
-	const N := 14
-	var pts := PackedVector2Array()
-	for i in N:
-		var a := TAU * i / N
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+const SHADOW_HW: float = 12.0
+const SHADOW_HEIGHT: float = 24.0
+
+func _draw_floor_shadow() -> void:
+	for lp: Vector2 in GameManager.LIGHT_POSITIONS:
+		var dx: float = global_position.x - lp.x
+		var dy: float = lp.y - global_position.y
+		var slen: float = clampf(dx * SHADOW_HEIGHT / maxf(abs(dy), 80.0), -22.0, 22.0)
+		var alpha: float = clampf(0.16 - absf(slen) * 0.003, 0.04, 0.16)
+		var pts := PackedVector2Array([
+			Vector2(-SHADOW_HW, 0), Vector2(SHADOW_HW, 0),
+			Vector2(slen + SHADOW_HW * 0.5, 4), Vector2(slen - SHADOW_HW * 0.5, 4),
+		])
+		draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, alpha))
 
 func _draw() -> void:
-	_draw_ellipse_shadow(Vector2(3, 2), 15, 5)
+	_draw_floor_shadow()
 	draw_rect(Rect2(-14, -24, 28, 24), Color(0.6, 0.4, 0.2))
 	# snout
 	draw_rect(Rect2(10, -14, 10, 8), Color(0.7, 0.5, 0.3))

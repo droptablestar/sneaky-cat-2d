@@ -11,16 +11,20 @@ func _on_body_entered(body: Node) -> void:
 		GameManager.collect_fish()
 		queue_free()
 
-func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
-	const N := 14
-	var pts := PackedVector2Array()
-	for i in N:
-		var a := TAU * i / N
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+func _draw_floor_shadow() -> void:
+	for lp: Vector2 in GameManager.LIGHT_POSITIONS:
+		var dx: float = global_position.x - lp.x
+		var dy: float = lp.y - global_position.y
+		var slen: float = clampf(dx * 8.0 / maxf(abs(dy), 80.0), -10.0, 10.0)
+		var alpha: float = clampf(0.1 - absf(slen) * 0.003, 0.03, 0.1)
+		var pts := PackedVector2Array([
+			Vector2(-5, 4), Vector2(5, 4),
+			Vector2(slen + 3.0, 7), Vector2(slen - 3.0, 7),
+		])
+		draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, alpha))
 
 func _draw() -> void:
-	_draw_ellipse_shadow(Vector2(0, 6), 8, 3)
+	_draw_floor_shadow()
 	# Body
 	draw_circle(Vector2(3, 0), 8, Color(1.0, 0.75, 0.0))
 	# Tail

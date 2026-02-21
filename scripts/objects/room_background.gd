@@ -80,11 +80,11 @@ func _draw_window(x: int, y: int) -> void:
 	draw_rect(Rect2(x, y + H, W, 338 - (y + H)), Color(1.0, 0.95, 0.8, 0.1))
 
 	# Vertical bar (center of glass)
-	var bar_x := gx + gw / 2 - 2
+	var bar_x := gx + gw / 2.0 - 2
 	draw_rect(Rect2(bar_x, gy, 4, gh), Color(0.75, 0.68, 0.55))
 
 	# Horizontal bar (mid-height of glass)
-	var bar_y := gy + gh / 2 - 2
+	var bar_y := gy + gh / 2.0 - 2
 	draw_rect(Rect2(gx, bar_y, gw, 4), Color(0.75, 0.68, 0.55))
 
 

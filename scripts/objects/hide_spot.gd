@@ -30,16 +30,22 @@ func _physics_process(_delta: float) -> void:
 		if body.get("is_hidden") != should_hide:
 			body.set_hidden(should_hide)
 
-func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
-	const N := 14
-	var pts := PackedVector2Array()
-	for i in N:
-		var a := TAU * i / N
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+func _draw_floor_shadow() -> void:
+	var hw: float = 28.0 if is_platform else 36.0
+	var h: float = 30.0 if is_platform else 56.0
+	for lp: Vector2 in GameManager.LIGHT_POSITIONS:
+		var dx: float = global_position.x - lp.x
+		var dy: float = lp.y - global_position.y
+		var slen: float = clampf(dx * h / maxf(abs(dy), 80.0), -22.0, 22.0)
+		var alpha: float = clampf(0.12 - absf(slen) * 0.002, 0.03, 0.12)
+		var pts := PackedVector2Array([
+			Vector2(-hw, 0), Vector2(hw, 0),
+			Vector2(slen + hw * 0.6, 4), Vector2(slen - hw * 0.6, 4),
+		])
+		draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, alpha))
 
 func _draw() -> void:
-	_draw_ellipse_shadow(Vector2(0, 4), 36, 6)
+	_draw_floor_shadow()
 	if is_platform:
 		# shelf surface
 		draw_rect(Rect2(-32, -30, 64, 8), Color(0.5, 0.35, 0.15))
