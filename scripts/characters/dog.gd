@@ -9,7 +9,16 @@ func _ready() -> void:
 
 var chase_target: Node = null
 
+func _draw_ellipse_shadow(center: Vector2, rx: float, ry: float) -> void:
+	const N := 14
+	var pts := PackedVector2Array()
+	for i in N:
+		var a := TAU * i / N
+		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.22))
+
 func _draw() -> void:
+	_draw_ellipse_shadow(Vector2(3, 2), 15, 5)
 	draw_rect(Rect2(-14, -24, 28, 24), Color(0.6, 0.4, 0.2))
 	# snout
 	draw_rect(Rect2(10, -14, 10, 8), Color(0.7, 0.5, 0.3))
