@@ -40,6 +40,7 @@ func _physics_process(delta: float) -> void:
 			_chase(delta)
 
 	move_and_slide()
+	queue_redraw()
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():

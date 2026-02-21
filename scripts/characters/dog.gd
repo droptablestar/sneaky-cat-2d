@@ -14,6 +14,14 @@ func _draw() -> void:
 	# snout
 	draw_rect(Rect2(10, -14, 10, 8), Color(0.7, 0.5, 0.3))
 
+	if state == State.ALERT or state == State.CHASE:
+		# bubble background
+		draw_circle(Vector2(0, -38), 12, Color(1.0, 1.0, 1.0))
+		# ! body
+		draw_rect(Rect2(-2.5, -47, 5, 12), Color(0.1, 0.1, 0.1))
+		# ! dot
+		draw_rect(Rect2(-2.5, -32, 5, 5), Color(0.1, 0.1, 0.1))
+
 func _on_detect(target: Node) -> void:
 	chase_target = target
 	super._on_detect(target)

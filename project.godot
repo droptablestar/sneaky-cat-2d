@@ -20,6 +20,7 @@ run/main_scene="res://scenes/main.tscn"
 window/size/viewport_width=1152
 window/size/viewport_height=400
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [physics]
 
