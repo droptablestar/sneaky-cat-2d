@@ -8,20 +8,19 @@
 
 config_version=5
 
+[application]
+
+config/name="sneaky-cat-2d"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+
 [autoload]
 
 Layers="*res://scripts/core/layers.gd"
 
-[application]
-
-config/name="sneaky-cat-2d"
-config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
-run/main_scene="res://scenes/main.tscn"
-
 [display]
 
-window/size/viewport_width=1152
 window/size/viewport_height=400
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"

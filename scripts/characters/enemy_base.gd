@@ -23,7 +23,7 @@ func _ready() -> void:
 	# Build raycast in code to avoid @onready issues with inherited scripts
 	raycast = RayCast2D.new()
 	raycast.enabled = true
-	raycast.collision_mask = Layers.to_mask([Layers.CAT, Layers.PLATFORM])
+	raycast.collision_mask = (1 << (Layers.CAT - 1)) | (1 << (Layers.PLATFORM - 1))
 	add_child(raycast)
 
 func _physics_process(delta: float) -> void:
