@@ -1,4 +1,4 @@
-class_name Layers
+extends Node
 
 const WORLD: int = 1
 const CAT: int = 2
