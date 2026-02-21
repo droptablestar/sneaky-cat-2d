@@ -1,0 +1,14 @@
+# Godot 4 generated files
+.godot/
+*.translation
+
+# Export presets (contains sensitive paths, generate locally)
+export_presets.cfg
+
+# macOS
+.DS_Store
+
+# Mono/C# (if ever used)
+.mono/
+data_*/
+mono_crash.*.json
