@@ -2,19 +2,19 @@ extends CharacterBody2D
 
 enum State { IDLE, RUNNING, JUMPING, HIDING }
 
-const SPEED = 180.0
-const JUMP_VELOCITY = -460.0
-const GRAVITY = 900.0
+@export var speed: float = 180.0
+@export var jump_velocity: float = -460.0
+@export var gravity: float = 900.0
 
 var state: State = State.IDLE
 var is_hidden: bool = false
 
 func _ready() -> void:
 	add_to_group("cat")
-	# Layer 2 = cat, collides with world (1) and platforms (4)
-	set_collision_layer_value(1, false)
-	set_collision_layer_value(2, true)
-	set_collision_mask_value(4, true)
+	set_collision_layer_value(Layers.WORLD, false)
+	set_collision_layer_value(Layers.CAT, true)
+	set_collision_mask_value(Layers.WORLD, true)
+	set_collision_mask_value(Layers.PLATFORM, true)
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
@@ -24,19 +24,19 @@ func _physics_process(delta: float) -> void:
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
-		velocity.y += GRAVITY * delta
+		velocity.y += gravity * delta
 
 func _handle_movement() -> void:
-	var direction := Input.get_axis("ui_left", "ui_right")
+	var direction := Input.get_axis("move_left", "move_right")
 
 	if direction != 0:
-		velocity.x = direction * SPEED
+		velocity.x = direction * speed
 		$Sprite2D.flip_h = direction < 0
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, speed)
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = jump_velocity
 
 func _update_state() -> void:
 	if is_hidden:

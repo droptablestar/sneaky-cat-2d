@@ -17,14 +17,13 @@ var raycast: RayCast2D
 
 func _ready() -> void:
 	patrol_origin = global_position
-	# Layer 3 = enemies, collide with world (1) only — pass through platforms
-	set_collision_layer_value(1, false)
-	set_collision_layer_value(3, true)
-	set_collision_mask_value(1, true)
+	set_collision_layer_value(Layers.WORLD, false)
+	set_collision_layer_value(Layers.ENEMY, true)
+	set_collision_mask_value(Layers.WORLD, true)
 	# Build raycast in code to avoid @onready issues with inherited scripts
 	raycast = RayCast2D.new()
 	raycast.enabled = true
-	raycast.collision_mask = 10  # layer 2 (cat) + layer 4 (platforms block ray)
+	raycast.collision_mask = Layers.to_mask([Layers.CAT, Layers.PLATFORM])
 	add_child(raycast)
 
 func _physics_process(delta: float) -> void:
