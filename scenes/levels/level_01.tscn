@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/cat.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/characters/dog.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/objects/hide_spot.tscn" id="3"]
 [ext_resource type="Script" path="res://scripts/objects/floor.gd" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/objects/fish.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/objects/exit_door.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(1152, 32)
@@ -34,3 +37,19 @@ is_platform = true
 [node name="Couch" parent="HideSpots" instance=ExtResource("3")]
 position = Vector2(800, 320)
 is_platform = false
+
+[node name="Collectibles" type="Node2D" parent="."]
+
+[node name="Fish1" parent="Collectibles" instance=ExtResource("5")]
+position = Vector2(250, 330)
+
+[node name="Fish2" parent="Collectibles" instance=ExtResource("5")]
+position = Vector2(630, 330)
+
+[node name="Fish3" parent="Collectibles" instance=ExtResource("5")]
+position = Vector2(950, 330)
+
+[node name="ExitDoor" parent="." instance=ExtResource("6")]
+position = Vector2(1090, 352)
+
+[node name="HUD" parent="." instance=ExtResource("7")]

@@ -1,7 +1,46 @@
 extends Node
 
+signal fish_updated(current: int, total: int)
+signal player_caught
+signal level_won
+
+var fish_collected: int = 0
+var fish_total: int = 0
+var _game_active: bool = true
+
 func _ready() -> void:
 	_setup_input_actions()
+
+func register_fish() -> void:
+	fish_total += 1
+
+func collect_fish() -> void:
+	if not _game_active:
+		return
+	fish_collected += 1
+	fish_updated.emit(fish_collected, fish_total)
+
+func catch_player() -> void:
+	if not _game_active:
+		return
+	_game_active = false
+	player_caught.emit()
+	await get_tree().create_timer(1.5).timeout
+	_reset()
+
+func try_complete_level() -> void:
+	if not _game_active or fish_collected < fish_total:
+		return
+	_game_active = false
+	level_won.emit()
+	await get_tree().create_timer(2.0).timeout
+	_reset()
+
+func _reset() -> void:
+	fish_collected = 0
+	fish_total = 0
+	_game_active = true
+	get_tree().reload_current_scene()
 
 func _setup_input_actions() -> void:
 	_add_action("move_left",  [KEY_LEFT,  KEY_A])
