@@ -6,22 +6,6 @@ func _ready() -> void:
 	move_speed = 140.0
 	detection_range = 120.0
 	patrol_distance = 100.0
-	_setup_catch_zone()
-
-func _setup_catch_zone() -> void:
-	var zone := Area2D.new()
-	zone.collision_mask = 1 << (Layers.CAT - 1)
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = 18.0
-	shape.shape = circle
-	zone.add_child(shape)
-	zone.body_entered.connect(_on_catch_zone_entered)
-	add_child(zone)
-
-func _on_catch_zone_entered(body: Node) -> void:
-	if body.is_in_group("cat") and not body.get("is_hidden"):
-		GameManager.catch_player()
 
 var chase_target: Node = null
 

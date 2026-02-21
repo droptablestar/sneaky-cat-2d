@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/objects/hide_spot.gd" id="1"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(80, 48)
+size = Vector2(80, 80)
 
 [sub_resource type="RectangleShape2D" id="2"]
 size = Vector2(64, 12)
@@ -13,6 +13,7 @@ script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1")
+position = Vector2(0, -16)
 
 [node name="Platform" type="StaticBody2D" parent="."]
 

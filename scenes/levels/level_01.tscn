@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/cat.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/characters/dog.tscn" id="2"]
@@ -7,11 +7,16 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/fish.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/objects/exit_door.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/characters/human.tscn" id="8"]
+[ext_resource type="Script" path="res://scripts/objects/room_background.gd" id="9"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(1152, 32)
 
 [node name="Level01" type="Node2D"]
+
+[node name="RoomBackground" type="Node2D" parent="."]
+script = ExtResource("9")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(576, 368)
@@ -28,6 +33,9 @@ position = Vector2(120, 320)
 [node name="Dog" parent="Enemies" instance=ExtResource("2")]
 position = Vector2(600, 320)
 
+[node name="Human" parent="Enemies" instance=ExtResource("8")]
+position = Vector2(900, 320)
+
 [node name="HideSpots" type="Node2D" parent="."]
 
 [node name="Shelf" parent="HideSpots" instance=ExtResource("3")]
@@ -37,6 +45,14 @@ is_platform = true
 [node name="Couch" parent="HideSpots" instance=ExtResource("3")]
 position = Vector2(800, 320)
 is_platform = false
+
+[node name="TableTop" parent="HideSpots" instance=ExtResource("3")]
+position = Vector2(480, 270)
+is_platform = true
+
+[node name="Bookcase" parent="HideSpots" instance=ExtResource("3")]
+position = Vector2(750, 270)
+is_platform = true
 
 [node name="Collectibles" type="Node2D" parent="."]
 
@@ -48,6 +64,9 @@ position = Vector2(630, 330)
 
 [node name="Fish3" parent="Collectibles" instance=ExtResource("5")]
 position = Vector2(950, 330)
+
+[node name="Fish4" parent="Collectibles" instance=ExtResource("5")]
+position = Vector2(750, 235)
 
 [node name="ExitDoor" parent="." instance=ExtResource("6")]
 position = Vector2(1090, 352)

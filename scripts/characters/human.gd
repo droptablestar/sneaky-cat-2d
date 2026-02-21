@@ -18,6 +18,14 @@ func _draw() -> void:
 	# head
 	draw_rect(Rect2(-8, -40, 16, 14), Color(0.9, 0.75, 0.6))
 
+	if state == State.ALERT or state == State.CHASE:
+		# bubble background
+		draw_circle(Vector2(0, -54), 12, Color(1.0, 1.0, 1.0))
+		# ! body
+		draw_rect(Rect2(-2.5, -63, 5, 12), Color(0.1, 0.1, 0.1))
+		# ! dot
+		draw_rect(Rect2(-2.5, -48, 5, 5), Color(0.1, 0.1, 0.1))
+
 func _on_detect(target: Node) -> void:
 	chase_target = target
 	alert_timer = ALERT_DURATION
