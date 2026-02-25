@@ -14,9 +14,12 @@ var patrol_direction: float = 1.0  # 1 = right, -1 = left
 const GRAVITY = 900.0
 
 var raycast: RayCast2D
+var _collision_shape: CollisionShape2D
 
 func _ready() -> void:
 	patrol_origin = global_position
+	_collision_shape = $CollisionShape2D
+	z_as_relative = false
 	set_collision_layer_value(Layers.WORLD, false)
 	set_collision_layer_value(Layers.ENEMY, true)
 	set_collision_mask_value(Layers.WORLD, true)
@@ -55,7 +58,36 @@ func _physics_process(delta: float) -> void:
 			_chase(delta)
 
 	move_and_slide()
+	z_index = int(global_position.y)
 	queue_redraw()
+
+func _get_collision_bottom() -> float:
+	if _collision_shape == null or _collision_shape.shape == null:
+		return 0.0
+	var shape := _collision_shape.shape
+	var offset_y := _collision_shape.position.y
+	if shape is CapsuleShape2D:
+		return offset_y + (shape.height * 0.5) + shape.radius
+	if shape is RectangleShape2D:
+		return offset_y + shape.size.y * 0.5
+	if shape is CircleShape2D:
+		return offset_y + shape.radius
+	return offset_y
+
+func _get_collision_height() -> float:
+	if _collision_shape == null or _collision_shape.shape == null:
+		return 0.0
+	var shape := _collision_shape.shape
+	if shape is CapsuleShape2D:
+		return shape.height + shape.radius * 2.0
+	if shape is RectangleShape2D:
+		return shape.size.y
+	if shape is CircleShape2D:
+		return shape.radius * 2.0
+	return 0.0
+
+func _get_height_above_floor() -> float:
+	return maxf(0.0, GameManager.FLOOR_Y - (global_position.y + _get_collision_bottom()))
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
