@@ -5,6 +5,7 @@ extends PointLight2D
 @export var light_energy: float = 0.7
 @export var light_scale: float = 4.5
 
+
 func _ready() -> void:
 	var grad := Gradient.new()
 	grad.set_color(0, Color(1.0, 1.0, 1.0, 1.0))

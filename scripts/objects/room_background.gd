@@ -1,5 +1,6 @@
 extends Node2D
 
+
 func _draw() -> void:
 	# --- Back wall fill ---
 	draw_rect(Rect2(0, 0, 1152, 352), Color(0.93, 0.87, 0.78))
@@ -7,21 +8,25 @@ func _draw() -> void:
 	# --- Side walls (trapezoids for 3D box-room depth) ---
 	# VP = (576, 190); side wall edges at x=80 and x=1072
 	# Left side wall
-	var left_wall := PackedVector2Array([
-		Vector2(0, 0),
-		Vector2(80, 26),
-		Vector2(80, 329),
-		Vector2(0, 352),
-	])
+	var left_wall := PackedVector2Array(
+		[
+			Vector2(0, 0),
+			Vector2(80, 26),
+			Vector2(80, 329),
+			Vector2(0, 352),
+		]
+	)
 	draw_colored_polygon(left_wall, Color(0.70, 0.62, 0.50))
 
 	# Right side wall
-	var right_wall := PackedVector2Array([
-		Vector2(1072, 26),
-		Vector2(1152, 0),
-		Vector2(1152, 352),
-		Vector2(1072, 329),
-	])
+	var right_wall := PackedVector2Array(
+		[
+			Vector2(1072, 26),
+			Vector2(1152, 0),
+			Vector2(1152, 352),
+			Vector2(1072, 329),
+		]
+	)
 	draw_colored_polygon(right_wall, Color(0.70, 0.62, 0.50))
 
 	# --- Ceiling strip ---
